@@ -1,7 +1,5 @@
 #include "http_requests_parser.hpp"
 
-#include <iostream>
-
 void HttpRequestsParser::setRequest(std::string request) {
 	requestString = request;
 	formattedString = "";
@@ -39,6 +37,7 @@ bool HttpRequestsParser::setVersion(std::string &temp_version) {
 bool HttpRequestsParser::setURI(std::string &temp_uri) {
 	machineName = "";
 	relativePath = "";
+	machinePort = "";
 	
 	if(temp_uri.size() < 1)
 		return false;
@@ -52,10 +51,21 @@ bool HttpRequestsParser::setURI(std::string &temp_uri) {
 			return false;
 		else {
 			std::string hierarchicalPart = temp_uri.substr(7, std::string::npos);
-			size_t end = hierarchicalPart.find("/", 0);
+			size_t end = hierarchicalPart.find(":", 0);
 			
-			machineName = hierarchicalPart.substr(0, end);
-			relativePath = hierarchicalPart.substr(end, std::string::npos);
+			if(end != std::string::npos) {
+				machineName = hierarchicalPart.substr(0, end);
+				
+				size_t end_url = hierarchicalPart.find("/", 0);
+				
+				machinePort = hierarchicalPart.substr(end+1, end_url);
+				relativePath = hierarchicalPart.substr(end_url, std::string::npos);
+			} else {
+				end = hierarchicalPart.find("/", 0);
+				machineName = hierarchicalPart.substr(0, end);
+				relativePath = hierarchicalPart.substr(end, std::string::npos);
+				machinePort = std::string("80");
+			}
 		}
 	}
 	
@@ -236,15 +246,24 @@ int HttpRequestsParser::parse() {
 	std::map<std::string ,std::string>::iterator it;
 	it = headers.find(std::string("host"));
 	if(machineName.size() == 0) {
-		if(it != headers.end())
+		if(it != headers.end()) {
 			machineName = it->second;
+			size_t end = machineName.find(":", 0);
+			
+			if(end != std::string::npos) {
+				machinePort = machineName.substr(end+1, std::string::npos);
+				machineName = machineName.substr(0, end);
+			} else {
+				machinePort = std::string("80");
+			}
+		}
 		else {
 			//std::cout<<"machine name not found!";
 			return setBadRequest();
 		}
 	} else {
 		if(it == headers.end())
-			headers.insert(std::pair<std::string, std::string>(std::string("host"), std::string(machineName)));
+			headers.insert(std::pair<std::string, std::string>(std::string("host"), machineName+std::string(":")+machinePort));
 	}
 	
 	//Got a 200-OK request
@@ -263,6 +282,10 @@ std::string HttpRequestsParser::getFormattedRequest() {
 
 std::string HttpRequestsParser::getHostName() {
 	return machineName;
+}
+
+std::string HttpRequestsParser::getMachinePort() {
+	return machinePort;
 }
 
 std::string HttpRequestsParser::getVersionString() {
@@ -298,7 +321,7 @@ std::string HttpRequestsParser::getMethodName() {
 }
 
 std::string HttpRequestsParser::getFullURL() {
-	return machineName+relativePath;
+	return machineName+std::string(":")+machinePort+relativePath;
 }
 
 void HttpRequestsParser::clear() {

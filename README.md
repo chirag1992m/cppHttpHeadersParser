@@ -1,5 +1,5 @@
 Given a string(std::string) and parses it stores the different headers given in a map of string (header name) and string (header value).
-It also stores the http version, method, machine name and the relative URI.
+It also stores the http version, method, machine name, machine port and the relative URI.
 
 It validates the requests and returns the corresponding status of the request,
 400 (Bad Request)
@@ -21,11 +21,12 @@ The puclic functions are:
 			501 (Not Implemented)
 			200 (OK)
 
-5. 	std::string getFormattedRequest();
-	std::string getHostName();
-	std::string getStatusString();
-	std::string getVersionString();
-	std::string getMethodName();
-	std::string getFullURL();
+5. 	* std::string getFormattedRequest();
+	* std::string getHostName();
+	* std::string getStatusString();
+	* std::string getVersionString();
+	* std::string getMethodName();
+	* std::string getFullURL();
+	* std::string getMachinePort();
 	
 	`get Methods` to get the required part of http request.
