@@ -58,7 +58,7 @@ bool HttpRequestsParser::setURI(std::string &temp_uri) {
 				
 				size_t end_url = hierarchicalPart.find("/", 0);
 				
-				machinePort = hierarchicalPart.substr(end+1, end_url);
+				machinePort = hierarchicalPart.substr(end+1, end_url-end-1);
 				relativePath = hierarchicalPart.substr(end_url, std::string::npos);
 			} else {
 				end = hierarchicalPart.find("/", 0);

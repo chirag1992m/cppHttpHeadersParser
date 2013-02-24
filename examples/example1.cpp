@@ -15,12 +15,12 @@ int main(int argc, char *argv[]) {
 	str = string("POST / HTTP/1.0\r\n\r\n");
 	parser.setRequest(str);
 	returnVal = parser.parse();
-	cout<<endl<<parser.getStatusString()<<endl;
+	cout<<endl<<parser.getStatusString()<<endl<<parser.getFormattedRequest();
 	
-	str = string("POST / HTTP/1.0\r\nhost: localhost\r\n\r\n");
+	str = string("POST / HTTP/1.0\r\nhost: localhost:80\r\n\r\n");
 	parser.setRequest(str);
 	returnVal = parser.parse();
-	cout<<endl<<parser.getStatusString()<<endl;
+	cout<<endl<<parser.getStatusString()<<endl<<parser.getFormattedRequest();
 	
 	return 0;
 }
