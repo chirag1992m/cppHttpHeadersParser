@@ -9,13 +9,13 @@ It validates the requests and returns the corresponding status of the request,
 Just copy the files in your project root folder and incluse it using: #include "/path/to/file/http_requests_parser.hpp"
 
 The puclic functions are:
-1. constructor() - Make a new and empty object of type HttpRequestsParser
+1. `constructor()` - Make a new and empty object of type HttpRequestsParser
 
-2. constructor(std::string) - Make a new object of type HttpRequestsParser and set the string that has to be parsed.
+2. `constructor(std::string)` - Make a new object of type HttpRequestsParser and set the string that has to be parsed.
 
-3. void setRequest() - set the string to be parsed.
+3. `void setRequest()` - set the string to be parsed.
 
-4. int parse() - after setting the string, calling this function will start the parsing of the string and separate all the header and its values.
+4. `int parse()` - after setting the string, calling this function will start the parsing of the string and separate all the header and its values.
 		The return values are:
 			400 (Bad Request)
 			501 (Not Implemented)
@@ -27,5 +27,5 @@ The puclic functions are:
 	std::string getVersionString();
 	std::string getMethodName();
 	std::string getFullURL();
-
-	get Methods to get the required part of http request.
+	
+	`get Methods` to get the required part of http request.

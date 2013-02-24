@@ -147,8 +147,11 @@ int HttpRequestsParser::parse() {
 	//first checking if delimited by \r or \r\n
 	size_t pos = requestString.find("\r\n");
 	if(pos == std::string::npos) {
-		//std::cout<<"replacing!!!!!"<<std::endl<<std::endl;
-		requestString.replace(requestString.begin(), requestString.end(), "\r", "\r\n");
+		pos = requestString.find("\r");
+		if(pos == std::string::npos)
+			return setBadRequest();
+		else
+			requestString.replace(requestString.begin(), requestString.end(), "\r", "\r\n");
 	} else {
 		//std::cout<<"found!!!!!"<<std::endl<<std::endl;
 	}
